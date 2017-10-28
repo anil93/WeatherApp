@@ -5,4 +5,5 @@ package com.anilaynaci.weatherapp.entities;
  */
 
 public class Rain {
+    
 }
