@@ -1,10 +1,12 @@
 package com.anilaynaci.weatherapp.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by anila on 29.10.2017.
  */
 
-public class Main {
+public class Main implements Serializable {
     private double temp;
     private double temp_min;
     private double temp_max;

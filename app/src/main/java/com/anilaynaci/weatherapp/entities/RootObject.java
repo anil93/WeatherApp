@@ -1,10 +1,12 @@
 package com.anilaynaci.weatherapp.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by anila on 29.10.2017.
  */
 
-public class RootObject {
+public class RootObject implements Serializable {
     private String cod;
     private double message;
     private int cnt;

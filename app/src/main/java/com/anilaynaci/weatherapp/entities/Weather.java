@@ -1,10 +1,12 @@
 package com.anilaynaci.weatherapp.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by anila on 29.10.2017.
  */
 
-public class Weather {
+public class Weather implements Serializable {
     private int id;
     private String main;
     private String description;

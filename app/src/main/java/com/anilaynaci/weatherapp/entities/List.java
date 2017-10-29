@@ -1,19 +1,30 @@
 package com.anilaynaci.weatherapp.entities;
 
 
+import java.io.Serializable;
+
 /**
  * Created by anila on 29.10.2017.
  */
 
-public class List {
+public class List implements Serializable {
     private int dt;
     private Main main;
     private java.util.List<Weather> weather;
     private Clouds clouds;
     private Wind wind;
     private Rain rain;
+    private Snow snow;
     private Sys sys;
     private String dt_txt;
+
+    public Snow getSnow() {
+        return snow;
+    }
+
+    public void setSnow(Snow snow) {
+        this.snow = snow;
+    }
 
     public int getDt() {
         return dt;
