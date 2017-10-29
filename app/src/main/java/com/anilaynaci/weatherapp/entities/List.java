@@ -1,6 +1,5 @@
 package com.anilaynaci.weatherapp.entities;
 
-
 import java.io.Serializable;
 
 /**
