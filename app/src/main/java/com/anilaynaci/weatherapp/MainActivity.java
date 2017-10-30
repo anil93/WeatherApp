@@ -36,20 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     LocationManager lm;
 
-    String currentImageCode;
-    String firstImageCode;
-    String secondImageCode;
-    String thirdImageCode;
-    String fourthImageCode;
-
-    Drawable currentImageIcon;
-    Drawable firstImageIcon;
-    Drawable secondImageIcon;
-    Drawable thirdImageIcon;
-    Drawable fourthImageIcon;
-
-    String latitude;
-    String longitude;
+    Drawable[] drawables;
 
     TextView txtCity;
     TextView txtCurrentTemp;
@@ -128,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
         middleLayout = findViewById(R.id.middleLayout);
         bottomLayout = findViewById(R.id.bottomLayout);
 
-
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
     }
 
@@ -136,18 +122,13 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         for (String permission : permissions) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                // show user that permission was denied. inactive the location based feature or force user to close the app
                 Toast.makeText(this, "GPS izni verilmedi. Konum almak için kabul etmelisin.", Toast.LENGTH_LONG).show();
-                //ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             } else {
                 if (ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "GPS izni verildi.", Toast.LENGTH_LONG).show();
-                    //  get Location from your device by some method or code
                     getGeoCoord();
                 } else {
-                    //set to never ask again
                     Toast.makeText(this, "GPS izni verilmemiş. Tekrar sorma olarak belirtilmiş. Lütfen uygulama ayarlarını sıfırlayın.", Toast.LENGTH_LONG).show();
-                    //do something here.
                 }
             }
         }
@@ -159,9 +140,8 @@ public class MainActivity extends AppCompatActivity {
         public void onLocationChanged(Location location) {
 
             if (location != null) {
-                latitude = Double.toString(location.getLatitude());
-                longitude = Double.toString(location.getLongitude());
-
+                String latitude = Double.toString(location.getLatitude());
+                String longitude = Double.toString(location.getLongitude());
                 new RetrieveRestClient().execute(latitude, longitude);
             } else {
                 Toast.makeText(MainActivity.this, "Konum bilgisi alınamıyor", Toast.LENGTH_LONG).show();
@@ -230,21 +210,32 @@ public class MainActivity extends AppCompatActivity {
                 //veriler günlere göre ayrıldı
                 getWeatherByDate(rootObject);
 
+                drawables = new Drawable[5];
+
                 //bugünün iconu
-                currentImageCode = currentDate.get(0).getWeather().get(0).getIcon() + ".png";
-                currentImageIcon = restClient.getDrawable(currentImageCode);
+                String currentImageCode = currentDate.get(0).getWeather().get(0).getIcon() + ".png";
+                Drawable currentImageIcon = restClient.getDrawable(currentImageCode);
+                drawables[0] = currentImageIcon;
+
                 //birinci günün iconu
-                firstImageCode = firstDate.get(4).getWeather().get(0).getIcon() + ".png";
-                firstImageIcon = restClient.getDrawable(firstImageCode);
+                String firstImageCode = firstDate.get(4).getWeather().get(0).getIcon() + ".png";
+                Drawable firstImageIcon = restClient.getDrawable(firstImageCode);
+                drawables[1] = firstImageIcon;
+
                 //ikinci günün iconu
-                secondImageCode = secondDate.get(4).getWeather().get(0).getIcon() + ".png";
-                secondImageIcon = restClient.getDrawable(secondImageCode);
+                String secondImageCode = secondDate.get(4).getWeather().get(0).getIcon() + ".png";
+                Drawable secondImageIcon = restClient.getDrawable(secondImageCode);
+                drawables[2] = secondImageIcon;
+
                 //üçüncü günün iconu
-                thirdImageCode = thirdDate.get(4).getWeather().get(0).getIcon() + ".png";
-                thirdImageIcon = restClient.getDrawable(thirdImageCode);
+                String thirdImageCode = thirdDate.get(4).getWeather().get(0).getIcon() + ".png";
+                Drawable thirdImageIcon = restClient.getDrawable(thirdImageCode);
+                drawables[3] = thirdImageIcon;
+
                 //dördüncü günün iconu
-                fourthImageCode = fourthDate.get(4).getWeather().get(0).getIcon() + ".png";
-                fourthImageIcon = restClient.getDrawable(fourthImageCode);
+                String fourthImageCode = fourthDate.get(4).getWeather().get(0).getIcon() + ".png";
+                Drawable fourthImageIcon = restClient.getDrawable(fourthImageCode);
+                drawables[4] = fourthImageIcon;
 
                 return rootObject;
             } catch (Exception e) {
@@ -256,14 +247,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(RootObject r) {
 
             if (r != null) {
-                Drawable[] d = new Drawable[5];
-                d[0] = currentImageIcon;
-                d[1] = firstImageIcon;
-                d[2] = secondImageIcon;
-                d[3] = thirdImageIcon;
-                d[4] = fourthImageIcon;
-
-                showInputValue(r, d);
+                showInputValue(r, drawables);
             }
         }
     }
@@ -282,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
         int tempMin = (int) (Math.round(currentDate.get(0).getMain().getTemp()) - 273d);
         txtCurrentTemp.setText(tempMin + "°C");
         txtCurrentMain.setText(currentDate.get(0).getWeather().get(0).getMain());
-        txtCurrentDescription.setText(currentDate.get(0).getWeather().get(0).getDescription());
+        txtCurrentDescription.setText("(" + currentDate.get(0).getWeather().get(0).getDescription() + ")");
         txtHumidity.setText(currentDate.get(0).getMain().getHumidity() + " %");
 
         double pressure = currentDate.get(0).getMain().getPressure();
@@ -401,13 +385,7 @@ public class MainActivity extends AppCompatActivity {
 
     public String DegreesToCardinalDetailed(double degrees) {
         degrees *= 10;
-        String[] cardinals = { "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N" };
-        return cardinals[(int)Math.round(((double)degrees % 3600) / 225)];
+        String[] cardinals = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N"};
+        return cardinals[(int) Math.round((degrees % 3600) / 225)];
     }
-
-    /*public String degToCompass(double degree) {
-        int val = (int)Math.floor((degree / 22.5) + 0.5);
-        String[] arr = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
-        return arr[(val % 16)];
-    }*/
 }

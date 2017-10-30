@@ -1,7 +1,6 @@
 package com.anilaynaci.weatherapp;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.anilaynaci.weatherapp.entities.RootObject;
 
@@ -25,14 +24,11 @@ public class RootObjectRestClient {
     public RootObject getRootObject(String lat, String lon) {
         try {
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            //String url = String.format(BASE_URL+"?lat="+lat+"&lon="+lon+"&appid="+myAPPID);
             String url = BASE_URL + "?lat=" + lat + "&lon=" + lon + "&appid=" + myAPPID;
             RootObject rootObject = restTemplate.getForObject(url, RootObject.class);
-            //Double message = rootObject.getMessage();
             return rootObject;
         } catch (Exception e) {
-            //Log.d("hata",e.getMessage());
-            //e.printStackTrace();
+            e.printStackTrace();
             return null;
         }
     }
@@ -44,7 +40,7 @@ public class RootObjectRestClient {
         String randomUUIDString = uuid.toString();
 
         try {
-            InputStream is = (InputStream) new URL(IMG_URL+iconCode).getContent();
+            InputStream is = (InputStream) new URL(IMG_URL + iconCode).getContent();
             Drawable d = Drawable.createFromStream(is, randomUUIDString);
             return d;
         } catch (Exception e) {
