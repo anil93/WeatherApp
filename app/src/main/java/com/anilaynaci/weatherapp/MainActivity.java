@@ -12,7 +12,9 @@ import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     TextView txtCurrentTemp;
     TextView txtHumidity;
     TextView txtPressure;
+    TextView txtWind;
     TextView txtFirstTempMax;
     TextView txtFirstTempMin;
     TextView txtSecondTempMax;
@@ -69,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
     ImageView imgSecond;
     ImageView imgThird;
     ImageView imgFourth;
+
+    LinearLayout topLayout;
+    LinearLayout middleLayout;
+    LinearLayout bottomLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
         txtCurrentTemp = findViewById(R.id.txtCurrentTemp);
         txtHumidity = findViewById(R.id.txtHumidity);
         txtPressure = findViewById(R.id.txtPressure);
+        txtWind = findViewById(R.id.txtWind);
+
         txtFirstTempMax = findViewById(R.id.txtFirstTempMax);
         txtFirstTempMin = findViewById(R.id.txtFirstTempMin);
         txtSecondTempMax = findViewById(R.id.txtSecondTempMax);
@@ -114,6 +123,11 @@ public class MainActivity extends AppCompatActivity {
         imgSecond = findViewById(R.id.imgSecond);
         imgThird = findViewById(R.id.imgThird);
         imgFourth = findViewById(R.id.imgFourth);
+
+        topLayout = findViewById(R.id.topLayout);
+        middleLayout = findViewById(R.id.middleLayout);
+        bottomLayout = findViewById(R.id.bottomLayout);
+
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
     }
@@ -271,6 +285,15 @@ public class MainActivity extends AppCompatActivity {
         txtCurrentDescription.setText(currentDate.get(0).getWeather().get(0).getDescription());
         txtHumidity.setText(currentDate.get(0).getMain().getHumidity() + " %");
 
+        double pressure = currentDate.get(0).getMain().getPressure();
+
+        txtPressure.setText(Double.toString(pressure) + " hPa");
+
+        double windSpeed = currentDate.get(0).getWind().getSpeed();
+        double windDegree = currentDate.get(0).getWind().getDeg();
+        String wind = windSpeed + "m/s " + DegreesToCardinalDetailed(windDegree);
+        txtWind.setText(wind);
+
         imgFirst.setImageDrawable(d[1]);
         imgSecond.setImageDrawable(d[2]);
         imgThird.setImageDrawable(d[3]);
@@ -288,6 +311,8 @@ public class MainActivity extends AppCompatActivity {
         txtFourthTempMax.setText(compareMaxTemp(fourthDate) + "°");
         txtFourthTempMin.setText(compareMinTemp(fourthDate) + "°");
 
+        middleLayout.setVisibility(View.VISIBLE);
+        bottomLayout.setVisibility(View.VISIBLE);
     }
 
     private int compareMaxTemp(java.util.List<List> firstDateMain) {
@@ -373,4 +398,16 @@ public class MainActivity extends AppCompatActivity {
 
         return days;
     }
+
+    public String DegreesToCardinalDetailed(double degrees) {
+        degrees *= 10;
+        String[] cardinals = { "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N" };
+        return cardinals[(int)Math.round(((double)degrees % 3600) / 225)];
+    }
+
+    /*public String degToCompass(double degree) {
+        int val = (int)Math.floor((degree / 22.5) + 0.5);
+        String[] arr = {"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"};
+        return arr[(val % 16)];
+    }*/
 }
