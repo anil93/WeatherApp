@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.7"
+        android:background="@android:color/white"
         android:orientation="horizontal">
 
         <TextView
@@ -22,7 +23,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="TextView"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="@android:color/black" />
     </LinearLayout>
 
     <LinearLayout
@@ -30,8 +32,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:background="@android:color/white"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,7 +75,9 @@
                     android:layout_weight="1"
                     android:text="TextView"
                     android:textAlignment="center"
-                    android:textSize="24sp" />
+                    android:textColor="@android:color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -100,7 +105,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="TextView"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black" />
             </LinearLayout>
 
             <LinearLayout
@@ -115,7 +121,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="TextView"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black" />
             </LinearLayout>
         </LinearLayout>
 
@@ -123,9 +130,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal"></LinearLayout>
 
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -160,7 +166,7 @@
                         android:id="@+id/tab1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#666565">
+                        android:background="#3a3939">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -295,7 +301,8 @@
                     <LinearLayout
                         android:id="@+id/tab2"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:background="@android:color/white">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -314,7 +321,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -343,7 +351,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="TextView"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -358,7 +367,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="TextView"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -379,7 +389,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -408,7 +419,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="TextView"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -423,7 +435,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="TextView"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -444,7 +457,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -473,7 +487,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="TextView"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -488,7 +503,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="TextView"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -509,7 +525,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -538,7 +555,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="TextView"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -553,7 +571,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="TextView"
-                                    android:textAlignment="center" />
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/black" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -564,10 +583,11 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/informationLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.7"
-        android:background="?android:attr/colorActivatedHighlight"
+        android:background="@android:color/white"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -583,7 +603,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:text="Güncelleme"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@android:color/black" />
         </LinearLayout>
 
         <LinearLayout
@@ -598,8 +619,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:text="TextView"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@android:color/black" />
         </LinearLayout>
     </LinearLayout>
 
