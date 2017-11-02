@@ -20,33 +20,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.anilaynaci.weatherapp.entities.List;
-import com.anilaynaci.weatherapp.entities.RootObject;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 
 public class MainActivity extends AppCompatActivity {
 
-    java.util.List<List> currentDate = new ArrayList<List>();
-    java.util.List<List> firstDate = new ArrayList<List>();
-    java.util.List<List> secondDate = new ArrayList<List>();
-    java.util.List<List> thirdDate = new ArrayList<List>();
-    java.util.List<List> fourthDate = new ArrayList<List>();
+    java.util.List<java.util.List<List>> days;
 
     Drawable[] drawables;
     //Current Date
-    TextView txtCity,txtCurrentTemp,txtHumidity,txtPressure,txtWind,txtCurrentMain,txtCurrentDescription;
+    TextView txtStatus, txtCurrentTemp, txtHumidity, txtPressure, txtWind, txtCurrentMain, txtCurrentDescription, txtLocation;
     //Other Date
-    TextView txtFirstTempMax,txtFirstTempMin;
-    TextView txtSecondTempMax,txtSecondTempMin;
-    TextView txtThirdTempMax,txtThirdTempMin;
-    TextView txtFourthTempMax,txtFourthTempMin;
+    TextView txtFirstTempMax, txtFirstTempMin;
+    TextView txtSecondTempMax, txtSecondTempMin;
+    TextView txtThirdTempMax, txtThirdTempMin;
+    TextView txtFourthTempMax, txtFourthTempMin;
     TextView txtUpdate;
 
-    ImageView imgCurrent,imgFirst,imgSecond,imgThird,imgFourth;
+    ImageView imgCurrent, imgFirst, imgSecond, imgThird, imgFourth;
 
-    LinearLayout topLayout,middleLayout,bottomLayout;
+    LinearLayout topLayout, middleLayout, bottomLayout;
 
     SharedPreferences sp;
     SharedPreferences.Editor edt;
@@ -74,13 +70,14 @@ public class MainActivity extends AppCompatActivity {
         spec.setIndicator("4 Gün");
         tabHost.addTab(spec);
         //current date
-        txtCity = findViewById(R.id.txtCity);
+        txtStatus = findViewById(R.id.txtStatus);
         txtCurrentTemp = findViewById(R.id.txtCurrentTemp);
         txtHumidity = findViewById(R.id.txtHumidity);
         txtPressure = findViewById(R.id.txtPressure);
         txtWind = findViewById(R.id.txtWind);
         txtCurrentMain = findViewById(R.id.txtCurrentMain);
         txtCurrentDescription = findViewById(R.id.txtCurrentDescription);
+        txtLocation = findViewById(R.id.txtLocation);
         //other date
         txtFirstTempMax = findViewById(R.id.txtFirstTempMax);
         txtFirstTempMin = findViewById(R.id.txtFirstTempMin);
@@ -110,15 +107,17 @@ public class MainActivity extends AppCompatActivity {
         sp = this.getPreferences(Context.MODE_PRIVATE);
         edt = sp.edit();
 
-        if (sp.contains("rootObject")) {
+        if (sp.contains("days")) {
             try {
-                Gson gson = new Gson();
-                //kayıtlı rootObject alınıyor
-                String json = sp.getString("rootObject", "");
-                RootObject r = gson.fromJson(json, RootObject.class);
-
+                //location verisini alınması
+                showLocation(sp.getString("location", null));
+                //days listesindeki verilerin alınması
+                Type type = new TypeToken<java.util.List<java.util.List<List>>>() {
+                }.getType();
+                days = new Gson().fromJson(sp.getString("days", null), type);
+                //güncellenme tarihini alınması
                 txtUpdate.setText(sp.getString("updateTime", ""));
-                //kayıtlı imageler alınıyor
+                //kayıtlı imagelerin alınması
                 drawables = new Drawable[5];
                 for (int i = 0; i < drawables.length; i++) {
                     byte[] array = Base64.decode(sp.getString(Integer.toString(i), "null"), Base64.DEFAULT);
@@ -126,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                     Drawable drawable = new BitmapDrawable(getBaseContext().getResources(), bitmap);
                     drawables[i] = drawable;
                 }
-                showInputValue(r, drawables, true);
+                showInputValue(days, drawables, true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -150,33 +149,29 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void showStatusValue(String status){
-        txtCity.setText(status);
+    public void showStatusValue(String status) {
+        txtStatus.setText(status);
     }
 
-    public void showInputValue(RootObject r, Drawable[] d, boolean flag) {
-        utilities.getWeatherByDate(r, currentDate,firstDate,secondDate,thirdDate,fourthDate);
+    public void showLocation(String location) {
+        txtLocation.setText(location);
+        edt.putString("location", location);
+    }
 
-        if (r.getCity() != null) {
-            String cityName = r.getCity().getName();
-            String country = r.getCity().getCountry();
-            txtCity.setText(country + " - " + cityName);
-        } else {
-            txtCity.setText("Şehir bilgisi alınamadı.");
-        }
+    public void showInputValue(java.util.List<java.util.List<List>> days, Drawable[] d, boolean flag) {
         //current date
-        txtCurrentMain.setText(currentDate.get(0).getWeather().get(0).getMain());
-        txtCurrentDescription.setText("(" + currentDate.get(0).getWeather().get(0).getDescription() + ")");
-        txtHumidity.setText(currentDate.get(0).getMain().getHumidity() + " %");
+        txtCurrentMain.setText(days.get(0).get(0).getWeather().get(0).getMain());
+        txtCurrentDescription.setText("(" + days.get(0).get(0).getWeather().get(0).getDescription() + ")");
+        txtHumidity.setText(days.get(0).get(0).getMain().getHumidity() + " %");
         //currentTemp
-        int tempMin = (int) (Math.round(currentDate.get(0).getMain().getTemp()) - 273d);
+        int tempMin = (int) (Math.round(days.get(0).get(0).getMain().getTemp()) - 273d);
         txtCurrentTemp.setText(tempMin + "°C");
         //get pressure
-        double pressure = currentDate.get(0).getMain().getPressure();
+        double pressure = days.get(0).get(0).getMain().getPressure();
         txtPressure.setText(Double.toString(pressure) + " hPa");
         //get wind
-        double windSpeed = currentDate.get(0).getWind().getSpeed();
-        double windDegree = currentDate.get(0).getWind().getDeg();
+        double windSpeed = days.get(0).get(0).getWind().getSpeed();
+        double windDegree = days.get(0).get(0).getWind().getDeg();
         String wind = windSpeed + "m/s " + utilities.DegreesToCardinalDetailed(windDegree);
         txtWind.setText(wind);
         //get images
@@ -188,34 +183,31 @@ public class MainActivity extends AppCompatActivity {
             imgFourth.setImageDrawable(d[4]);
         }
         //first date temperature
-        txtFirstTempMax.setText(utilities.compareMaxTemp(firstDate) + "°");
-        txtFirstTempMin.setText(utilities.compareMinTemp(firstDate) + "°");
+        txtFirstTempMax.setText(utilities.compareMaxTemp(days.get(1)) + "°");
+        txtFirstTempMin.setText(utilities.compareMinTemp(days.get(1)) + "°");
         //second date temperature
-        txtSecondTempMax.setText(utilities.compareMaxTemp(secondDate) + "°");
-        txtSecondTempMin.setText(utilities.compareMinTemp(secondDate) + "°");
+        txtSecondTempMax.setText(utilities.compareMaxTemp(days.get(2)) + "°");
+        txtSecondTempMin.setText(utilities.compareMinTemp(days.get(2)) + "°");
         //third date temperature
-        txtThirdTempMax.setText(utilities.compareMaxTemp(thirdDate) + "°");
-        txtThirdTempMin.setText(utilities.compareMinTemp(thirdDate) + "°");
+        txtThirdTempMax.setText(utilities.compareMaxTemp(days.get(3)) + "°");
+        txtThirdTempMin.setText(utilities.compareMinTemp(days.get(3)) + "°");
         //fourth date temperature
-        txtFourthTempMax.setText(utilities.compareMaxTemp(fourthDate) + "°");
-        txtFourthTempMin.setText(utilities.compareMinTemp(fourthDate) + "°");
+        txtFourthTempMax.setText(utilities.compareMaxTemp(days.get(4)) + "°");
+        txtFourthTempMin.setText(utilities.compareMinTemp(days.get(4)) + "°");
 
         middleLayout.setVisibility(View.VISIBLE);
         bottomLayout.setVisibility(View.VISIBLE);
 
         //yeni gelen verilerin cihaza kaydının yapılması
         if (!flag) {
-            //Son güncelleme tarihi
+            topLayout.setVisibility(View.INVISIBLE);
+            //days listesinin preferences a eklenmesi
+            String data = new Gson().toJson(days);
+            edt.putString("days", data);
+            //Son güncelleme tarihinin preferences a eklenmesi
             String updateTime = utilities.getCurrentDate();
+            edt.putString("updateTime", updateTime);
             txtUpdate.setText(updateTime);
-            try {
-                Gson gson = new Gson();
-                String json = gson.toJson(r);
-                edt.putString("rootObject", json);
-                edt.putString("updateTime", updateTime);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             //imagelerin preferences'a eklenmesi
             for (int i = 0; i < d.length; i++) {
                 Bitmap bitmap = ((BitmapDrawable) d[i]).getBitmap();

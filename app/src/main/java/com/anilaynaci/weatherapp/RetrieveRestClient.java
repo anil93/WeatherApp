@@ -13,7 +13,9 @@ import java.util.ArrayList;
  * Created by anila on 1.11.2017.
  */
 
-class RetrieveRestClient extends AsyncTask<String, Void, RootObject> {
+class RetrieveRestClient extends AsyncTask<String, Void, java.util.List<java.util.List<List>>> {
+
+    java.util.List<java.util.List<List>> days;
 
     java.util.List<List> currentDate = new ArrayList<List>();
     java.util.List<List> firstDate = new ArrayList<List>();
@@ -25,20 +27,22 @@ class RetrieveRestClient extends AsyncTask<String, Void, RootObject> {
 
     Utilities utilities;
 
+    RootObject rootObject;
+
     Context context;
 
     public RetrieveRestClient(Context context) {
         this.context = context;
     }
 
-    protected RootObject doInBackground(String... params) {
+    protected java.util.List<java.util.List<List>> doInBackground(String... params) {
         try {
             RootObjectRestClient restClient = new RootObjectRestClient();
-            RootObject rootObject = restClient.getRootObject(params[0], params[1]);
+            rootObject = restClient.getRootObject(params[0], params[1]);
 
             utilities = new Utilities();
             //veriler günlere göre ayrıldı
-            utilities.getWeatherByDate(rootObject, currentDate,firstDate,secondDate,thirdDate,fourthDate);
+            utilities.getWeatherByDate(rootObject, currentDate, firstDate, secondDate, thirdDate, fourthDate);
 
             drawables = new Drawable[5];
 
@@ -64,7 +68,14 @@ class RetrieveRestClient extends AsyncTask<String, Void, RootObject> {
             Drawable fourthImageIcon = restClient.getDrawable(fourthImageCode);
             drawables[4] = fourthImageIcon;
 
-            return rootObject;
+            days = new ArrayList<>();
+            days.add(currentDate);
+            days.add(firstDate);
+            days.add(secondDate);
+            days.add(thirdDate);
+            days.add(fourthDate);
+
+            return days;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -76,10 +87,21 @@ class RetrieveRestClient extends AsyncTask<String, Void, RootObject> {
         super.onPreExecute();
     }
 
-    protected void onPostExecute(RootObject r) {
-        if (r != null) {
+    protected void onPostExecute(java.util.List<java.util.List<List>> days) {
+        if (days != null) {
             MainActivity mA = (MainActivity) context;
-            mA.showInputValue(r,drawables,false);
+
+            if (rootObject.getCity() != null) {
+                String cityName = rootObject.getCity().getName();
+                String country = rootObject.getCity().getCountry();
+                String str = country + " - " + cityName;
+                mA.showLocation(str);
+            } else {
+                String str = "Şehir bilgisi alınamadı.";
+                mA.showLocation(str);
+            }
+
+            mA.showInputValue(days, drawables, false);
         }
     }
 }

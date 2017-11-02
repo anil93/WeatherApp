@@ -34,8 +34,8 @@ public class GPSReceiver {
             if (location != null) {
                 String latitude = Double.toString(location.getLatitude());
                 String longitude = Double.toString(location.getLongitude());
-                String status = latitude + " - " + longitude;
-                mA.showStatusValue(status);
+                //String status = latitude + " - " + longitude;
+                mA.showStatusValue("Veriler yükleniyor...");
                 new RetrieveRestClient(context).execute(latitude, longitude);
             } else {
                 Toast.makeText(context, "Konum bilgisi alınamıyor.", Toast.LENGTH_LONG).show();
