@@ -6,6 +6,8 @@ import com.anilaynaci.weatherapp.entities.RootObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by anila on 1.11.2017.
@@ -106,5 +108,43 @@ public class Utilities {
                 params[4].add(myList);
             }
         }
+    }
+
+    public String mostRepeatedWord(java.util.List<List> list) {
+        java.util.List<String> iconList = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            iconList.add(list.get(i).getWeather().get(0).getIcon());
+        }
+
+        Map<String, Integer> stringsCount = new HashMap<>();
+
+        for (String s : iconList) {
+            Integer c = stringsCount.get(s);
+            if (c == null) {
+                c = new Integer(0);
+            }
+            c++;
+            stringsCount.put(s, c);
+        }
+
+        Map.Entry<String, Integer> mostRepeated = null;
+
+        for (Map.Entry<String, Integer> e : stringsCount.entrySet()) {
+            if (mostRepeated == null || mostRepeated.getValue() < e.getValue()) {
+                mostRepeated = e;
+            }
+        }
+
+        String mostRepeatedValue = null;
+
+        if (mostRepeated != null) {
+            mostRepeatedValue = mostRepeated.getKey();
+        }
+        else{
+            mostRepeatedValue = iconList.get(5);
+        }
+
+        return mostRepeatedValue;
     }
 }

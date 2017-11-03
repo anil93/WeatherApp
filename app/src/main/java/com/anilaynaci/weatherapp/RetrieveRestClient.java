@@ -52,19 +52,19 @@ class RetrieveRestClient extends AsyncTask<String, Void, java.util.List<java.uti
             Drawable currentImageIcon = restClient.getDrawable(currentImageCode);
             drawables[0] = currentImageIcon;
             //first date image
-            String firstImageCode = firstDate.get(4).getWeather().get(0).getIcon() + ".png";
+            String firstImageCode = utilities.mostRepeatedWord(firstDate) + ".png";
             Drawable firstImageIcon = restClient.getDrawable(firstImageCode);
             drawables[1] = firstImageIcon;
             //second date image
-            String secondImageCode = secondDate.get(4).getWeather().get(0).getIcon() + ".png";
+            String secondImageCode = utilities.mostRepeatedWord(secondDate) + ".png";
             Drawable secondImageIcon = restClient.getDrawable(secondImageCode);
             drawables[2] = secondImageIcon;
             //third date image
-            String thirdImageCode = thirdDate.get(4).getWeather().get(0).getIcon() + ".png";
+            String thirdImageCode = utilities.mostRepeatedWord(thirdDate) + ".png";
             Drawable thirdImageIcon = restClient.getDrawable(thirdImageCode);
             drawables[3] = thirdImageIcon;
             //fourth date image
-            String fourthImageCode = fourthDate.get(4).getWeather().get(0).getIcon() + ".png";
+            String fourthImageCode = utilities.mostRepeatedWord(fourthDate) + ".png";
             Drawable fourthImageIcon = restClient.getDrawable(fourthImageCode);
             drawables[4] = fourthImageIcon;
 
